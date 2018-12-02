@@ -28,6 +28,7 @@ ripit.onclick = function() {
           file: "episode_list.js"
         });
       });
+      chrome.storage.sync.set({downloadLinkList: ""});
 }
 
 yamete.onclick = function() {

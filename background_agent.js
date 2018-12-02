@@ -64,32 +64,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.storage.sync.get("downloadLinkList", function(result) {
           var downloadLinkList = result.downloadLinkList;
           //dumping current data
-          var str = "";
-          for(var i = 0; i < downloadLinkList.length; i++){
-            str += downloadLinkList[i] + "\n";
-          }
-          alert(str);
+          alert(downloadLinkList);
         });
 
 
       } else { //meaning this was not the last element in the list
         chrome.storage.sync.set({
           episodeList: episodeList
-        }); //saving the new list
-
-        // //dumping current data
-        // var downloadLinkList = [];
-        // episodeList = data.episodeList;
-        // var str = "";
-        // for(var i = 0; i < episodeList.length; i++){
-        //   str += episodeList[i] + "\n";
-        // }
-        // alert(str);
-
+        });
         sendMessageToTab("goToPage", nextPage); //sending message to script to goto the nextPage
       }
     });
   }
+
+
+
   else if (request.todo == "canIRun") {
     getRunningStatus();
     if (isRunning) {
@@ -98,15 +87,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sendMessageToTab("noCannotRun", null);
     }
   }
+
+
+
   else if (request.todo == "addDownloadLink") {
-    var downloadLinkList;
     var linkToAdd = request.data;
     chrome.storage.sync.get("downloadLinkList", function(result) {
-      downloadLinkList = result.downloadLinkList;
-    });
-    downloadLinkList.push(linkToAdd);
-    chrome.storage.sync.set({
-      downloadLinkList: downloadLinkList
+      var downloadLinkList = result.downloadLinkList;
+      if(downloadLinkList == undefined) {
+        downloadLinkList = "";
+      }
+      downloadLinkList += linkToAdd + "\n";
+      chrome.storage.sync.set({
+        downloadLinkList: downloadLinkList
+      });
     });
   }
 });
