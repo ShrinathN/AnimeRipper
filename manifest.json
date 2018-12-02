@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "version": "1.0",
+  "name": "Anime Ripper",
+  "description": "Rips anime download links off chia-anime.tv",
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "Anime Ripper"
+  },
+
+  "background": {
+    "scripts": ["background_agent.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://ww2.chia-anime.tv/episode/*"],
+      "js": ["episode_list.js"]
+    }
+  ],
+
+  "permissions": [
+    "tabs",
+    "storage",
+    "http://ww2.chia-anime.tv/episode/*",
+    "http://ww2.chia-anime.tv/*"
+  ]
+}
