@@ -11,10 +11,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 
-window.setTimeout(ripLink, 1000);
+window.setTimeout(ripLink, 1000); //runs after 1 second to let the browser decode the download link, its obfuscated
 
 function ripLink() {
   var greenButtons = document.getElementsByClassName("bttn green");
+  if(greenButtons == undefined) //probably means page hasn't finished loading
+  {
+    window.setTimeout(ripLink, 1000); //execute itself again 1 second later
+    return; //exit
+  }
   var downloadLink = greenButtons[0].href;
   chrome.runtime.sendMessage({
     todo: "addDownloadLink",
