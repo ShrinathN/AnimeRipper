@@ -14,11 +14,13 @@
   },
 
   "content_scripts": [{
-      "matches": ["http://ww2.chia-anime.tv/*"],
+      "matches": ["http://ww2.chia-anime.tv/*subbed/"],
+      "run_at": "document_idle",
       "js": ["episode_page.js"]
     },
     {
-      "matches": ["http://download.animepremium.tv/video/*"],
+      "matches": ["http://download.animepremium.tv/*"],
+      "run_at": "document_idle",
       "js": ["download_page.js"]
     }
   ],
@@ -28,6 +30,6 @@
     "storage",
     "http://ww2.chia-anime.tv/episode/*",
     "http://ww2.chia-anime.tv/*",
-    "http://download.animepremium.tv/video/*"
+    "http://download.animepremium.tv/*"
   ]
 }
