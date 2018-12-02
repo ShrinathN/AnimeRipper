@@ -3,7 +3,6 @@
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.todo == "goToPage") {
-    alert("WHOO");
     window.location.href = request.data;
   }
 });
@@ -17,5 +16,8 @@ function ripLink() {
   chrome.runtime.sendMessage({
     todo: "addDownloadLink",
     data: downloadLink
+  });
+  chrome.runtime.sendMessage({
+    todo: "whatIsNextPage"
   });
 }

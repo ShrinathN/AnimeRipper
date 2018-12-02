@@ -1,6 +1,18 @@
 var isRunning;
 var episodeList;
 
+function sendMessageToTab(todo, data) {
+  chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  }, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {
+      todo: todo,
+      data: data
+    });
+  });
+}
+
 function getRunningStatus() {
   chrome.storage.sync.get("isRunning", function(result) {
     isRunning = result.isRunning;
@@ -9,97 +21,106 @@ function getRunningStatus() {
 
 function sendNextPage() {
   chrome.storage.sync.get("episodeList", function(data) {
+    episodeList = data.episodeList;
+    var nextPage = episodeList.pop();
+    var str = "";
+    for(var i = 0; i < episodeList.length; i++){
+      str += episodeList[i] + "\n";
+    }
+    if (nextPage == undefined) //meaning all have been gone over, process ends here
+    {
+      chrome.storage.sync.set({
+        isRunning: false
+      }); //storing data
+    } else { //meaning this was not the last element in the list
+      chrome.storage.sync.set({
+        episodeList: episodeList
+      }); //saving the new list
+    }
+  });
+}
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.todo == "storeEpisodeList") //the main episode list is being sent in as data. Sent by episode_list.js
+  {
+    episodeList = request.data;
+    // episodeList.pop(); //first one has already been visited, dropping
+    chrome.storage.sync.set({
+      episodeList: episodeList
+    }); //storing data
+  }
+  else if (request.todo == "whatIsNextPage") //if a script is requesting the next page to go to
+  {
+    chrome.storage.sync.get("episodeList", function(data) {
       episodeList = data.episodeList;
-      var nextPage = episodeList.pop();
       var nextPage = episodeList.pop();
       if (nextPage == undefined) //meaning all have been gone over, process ends here
       {
         chrome.storage.sync.set({
           isRunning: false
         }); //storing data
+
+
+        chrome.storage.sync.get("downloadLinkList", function(result) {
+          var downloadLinkList = result.downloadLinkList;
+          //dumping current data
+          var str = "";
+          for(var i = 0; i < downloadLinkList.length; i++){
+            str += downloadLinkList[i] + "\n";
+          }
+          alert(str);
+        });
+
+
       } else { //meaning this was not the last element in the list
         chrome.storage.sync.set({
           episodeList: episodeList
         }); //saving the new list
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-          }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-              todo: "goToPage",
-              data: nextPage
-            }, function() {
-              alert("SnedMESSAGE");
-            });
-          });
-        }
-  });
-}
 
-  document.body.onload = function() {
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      if (request.todo == "storeEpisodeList") //the main episode list is being sent in as data. Sent by episode_list.js
-      {
-        episodeList = request.data;
-        chrome.storage.sync.set({
-          episodeList: episodeList
-        }); //storing data
-      }
-      // else if (request.todo == "whatIsNextPage") //if a script is requesting the next page to go to
-      // {
-      //   chrome.storage.sync.get("episodeList", function(data) {
-      //     episodeList = data.episodeList;
-      //     var nextPage = episodeList.pop();
-      //     if (nextPage == undefined) //meaning all have been gone over, process ends here
-      //     {
-      //       chrome.storage.sync.set({
-      //         isRunning: false
-      //       }); //storing data
-      //     } else { //meaning this was not the last element in the list
-      //       chrome.storage.sync.set({
-      //         episodeList: episodeList
-      //       }); //saving the new list
-      //       chrome.runtime.sendMessage({
-      //         todo: "goToPage",
-      //         data: nextPage
-      //       }); //sending message to script to goto the nextPage
-      //     }
-      //   });
-      // }
-      // else if (request.todo == "canIRun") {
-      //   getRunningStatus();
-      //   if (isRunning) {
-      //     chrome.runtime.sendMessage({
-      //       todo: "yesCanRun"
-      //     });
-      //   } else {
-      //     chrome.runtime.sendMessage({
-      //       todo: "noCannotRun"
-      //     });
-      //   }
-      // }
-      else if (request.todo == "addDownloadLink") {
-        var downloadLinkList = [];
-        var linkToAdd = request.data;
-        chrome.storage.sync.get("downloadLinkList", function(result) {
-          downloadLinkList = result.downloadLinkList;
-        });
-        downloadLinkList.push(linkToAdd);
-        chrome.storage.sync.set({
-          downloadLinkList: downloadLinkList
-        });
-        window.setTimeout(sendNextPage, 500);
+        // //dumping current data
+        // var downloadLinkList = [];
+        // episodeList = data.episodeList;
+        // var str = "";
+        // for(var i = 0; i < episodeList.length; i++){
+        //   str += episodeList[i] + "\n";
+        // }
+        // alert(str);
+
+        sendMessageToTab("goToPage", nextPage); //sending message to script to goto the nextPage
       }
     });
   }
-  /*
-  ===LIST OF REQUESTS===
+  else if (request.todo == "canIRun") {
+    getRunningStatus();
+    if (isRunning) {
+      sendMessageToTab("yesCanRun", null);
+    } else {
+      sendMessageToTab("noCannotRun", null);
+    }
+  }
+  else if (request.todo == "addDownloadLink") {
+    var downloadLinkList;
+    var linkToAdd = request.data;
+    chrome.storage.sync.get("downloadLinkList", function(result) {
+      downloadLinkList = result.downloadLinkList;
+    });
+    downloadLinkList.push(linkToAdd);
+    chrome.storage.sync.set({
+      downloadLinkList: downloadLinkList
+    });
+  }
+});
 
-  storeEpisodeList
-  whatIsNextPage -=-=-=-=- goToPage
-  canIRun -=-=-= yesCanRun
-              -= noCannotRun
-  addDownloadLink
 
-  ===LIST OF REQUESTS===
-  */
+
+/*
+===LIST OF REQUESTS===
+
+storeEpisodeList
+whatIsNextPage -=-=-=-=- goToPage
+canIRun -=-=-= yesCanRun
+            -= noCannotRun
+addDownloadLink
+
+===LIST OF REQUESTS===
+*/
