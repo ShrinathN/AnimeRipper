@@ -13,8 +13,7 @@
     "persistent": false
   },
 
-  "content_scripts": [
-    {
+  "content_scripts": [{
       "matches": ["http://ww2.chia-anime.tv/*"],
       "js": ["episode_page.js"]
     },
