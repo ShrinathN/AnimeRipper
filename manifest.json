@@ -15,8 +15,8 @@
 
   "content_scripts": [
     {
-      "matches": ["http://ww2.chia-anime.tv/episode/*"],
-      "js": ["episode_list.js"]
+      "matches": ["http://ww2.chia-anime.tv/*"],
+      "js": ["episode_page.js"]
     }
   ],
 
