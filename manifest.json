@@ -17,6 +17,10 @@
     {
       "matches": ["http://ww2.chia-anime.tv/*"],
       "js": ["episode_page.js"]
+    },
+    {
+      "matches": ["http://download.animepremium.tv/video/*"],
+      "js": ["download_page.js"]
     }
   ],
 
@@ -24,6 +28,7 @@
     "tabs",
     "storage",
     "http://ww2.chia-anime.tv/episode/*",
-    "http://ww2.chia-anime.tv/*"
+    "http://ww2.chia-anime.tv/*",
+    "http://download.animepremium.tv/video/*"
   ]
 }
