@@ -5,6 +5,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.todo == "goToPage") {
     window.location.href = request.data;
   }
+  else if (request.todo == "writeData") {
+    document.write(request.data);
+  }
 });
 
 

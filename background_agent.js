@@ -23,10 +23,6 @@ function sendNextPage() {
   chrome.storage.sync.get("episodeList", function(data) {
     episodeList = data.episodeList;
     var nextPage = episodeList.pop();
-    var str = "";
-    for(var i = 0; i < episodeList.length; i++){
-      str += episodeList[i] + "\n";
-    }
     if (nextPage == undefined) //meaning all have been gone over, process ends here
     {
       chrome.storage.sync.set({
@@ -60,13 +56,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           isRunning: false
         }); //storing data
 
-
+/////////////////////////////////////
         chrome.storage.sync.get("downloadLinkList", function(result) {
           var downloadLinkList = result.downloadLinkList;
-          //dumping current data
-          alert(downloadLinkList);
+          var finalStr = "<!DOCTYPE HTML><html><body>" + downloadLinkList + "</body></html>";
+          sendMessageToTab("writeData", finalStr);
         });
-
+/////////////////////////////////////
 
       } else { //meaning this was not the last element in the list
         chrome.storage.sync.set({
@@ -115,6 +111,7 @@ whatIsNextPage -=-=-=-=- goToPage
 canIRun -=-=-= yesCanRun
             -= noCannotRun
 addDownloadLink
+writeData
 
 ===LIST OF REQUESTS===
 */
