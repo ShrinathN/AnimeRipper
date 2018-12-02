@@ -20,7 +20,7 @@
     },
     {
       "matches": ["http://download.animepremium.tv/*"],
-      "run_at": "document_idle",
+      "run_at": "document_end",
       "js": ["download_page.js"]
     }
   ],
