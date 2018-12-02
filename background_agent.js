@@ -93,7 +93,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       if(downloadLinkList == undefined) {
         downloadLinkList = "";
       }
-      downloadLinkList += linkToAdd + "\n";
+      downloadLinkList += linkToAdd + "<br>";
       chrome.storage.sync.set({
         downloadLinkList: downloadLinkList
       });
