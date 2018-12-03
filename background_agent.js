@@ -1,4 +1,3 @@
-var isRunning;
 var episodeList;
 
 function sendMessageToTab(todo, data) {
@@ -13,28 +12,16 @@ function sendMessageToTab(todo, data) {
   });
 }
 
-function getRunningStatus() {
-  chrome.storage.sync.get("isRunning", function(result) {
-    isRunning = result.isRunning;
-  });
-}
-
-function sendNextPage() {
-  chrome.storage.sync.get("episodeList", function(data) {
-    episodeList = data.episodeList;
-    var nextPage = episodeList.pop();
-    if (nextPage == undefined) //meaning all have been gone over, process ends here
-    {
-      chrome.storage.sync.set({
-        isRunning: false
-      }); //storing data
-    } else { //meaning this was not the last element in the list
-      chrome.storage.sync.set({
-        episodeList: episodeList
-      }); //saving the new list
-    }
-  });
-}
+// function getRunningStatus() {
+// var isRunning;
+//   chrome.storage.sync.get("isRunning", function(result) {
+//     if(result.isRunning){
+//     }
+//     else {
+//     }
+//   });
+//   return isRunning;
+// }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.todo == "storeEpisodeList") //the main episode list is being sent in as data. Sent by episode_list.js
@@ -52,9 +39,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       var nextPage = episodeList.pop();
       if (nextPage == undefined) //meaning all have been gone over, process ends here
       {
-        chrome.storage.sync.set({
-          isRunning: false
-        }); //storing data
+        chrome.storage.sync.set({isRunning: false}); //storing data
 
 /////////////////////////////////////
         chrome.storage.sync.get("downloadLinkList", function(result) {
@@ -76,12 +61,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
   else if (request.todo == "canIRun") {
-    getRunningStatus();
-    if (isRunning) {
-      sendMessageToTab("yesCanRun", null);
-    } else {
-      sendMessageToTab("noCannotRun", null);
-    }
+    chrome.storage.sync.get("isRunning", function(result) {
+      if(result.isRunning){
+        sendMessageToTab("yesCanRun", null);
+      }
+      else {
+        sendMessageToTab("noCannotRun", null);
+      }
+    });
   }
 
 

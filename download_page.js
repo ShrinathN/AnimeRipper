@@ -8,10 +8,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   else if (request.todo == "writeData") {
     document.write(request.data);
   }
+  else if (request.todo == "yesCanRun")
+  {
+    window.setTimeout(ripLink, 1000); //runs after 1 second to let the browser decode the download link, its obfuscated
+  }
+  else if (request.todo == "noCannotRun")
+  {
+    console.log("Not permitted to run");
+  }
 });
 
-
-window.setTimeout(ripLink, 1000); //runs after 1 second to let the browser decode the download link, its obfuscated
 
 function ripLink() {
   var greenButtons = document.getElementsByClassName("bttn green");
@@ -29,3 +35,5 @@ function ripLink() {
     todo: "whatIsNextPage"
   });
 }
+
+chrome.runtime.sendMessage({todo: "canIRun"});
