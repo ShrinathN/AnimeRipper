@@ -5,9 +5,22 @@
   "description": "Rips anime download links off chia-anime.tv",
   "browser_action": {
     "default_popup": "popup.html",
-    "default_title": "Anime Ripper"
+    "default_title": "Anime Ripper",
+    "default_icon": {
+        "16": "images/logo16.png",
+        "32": "images/logo32.png",
+        "48": "images/logo48.png",
+        "128": "images/logo128.png"
+      }
   },
-
+  
+  "icons": {
+      "16": "images/logo16.png",
+      "32": "images/logo32.png",
+      "48": "images/logo48.png",
+      "128": "images/logo128.png"
+    },
+  
   "background": {
     "scripts": ["background_agent.js"],
     "persistent": false

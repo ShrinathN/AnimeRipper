@@ -26,7 +26,12 @@ function ripLink() {
     window.setTimeout(ripLink, 1000); //execute itself again 1 second later
     return; //exit
   }
-  var downloadLink = greenButtons[0].href;
+  var downloadLink = "";
+  for(var counter = 0; counter < greenButtons.length; counter++)
+  {
+    downloadLink += greenButtons[counter].href + "<br>";
+  }
+  downloadLink += "<br>";
   chrome.runtime.sendMessage({
     todo: "addDownloadLink",
     data: downloadLink

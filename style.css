@@ -1,0 +1,10 @@
+body {
+  background-image: linear-gradient(lightblue, white);
+  width: 150px;
+  height: 150px;
+}
+button{
+  background-color: red;
+  height: 70px;
+  width: 70px;
+}
