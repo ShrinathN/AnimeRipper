@@ -17,7 +17,7 @@ This project is a chrome extension so it should work on Linux, Windows, and OSX 
 git clone http://github.com/ShrinathN/AnimeRipper
 ```
 
-2. Open Chrome and browse to your extensions page. Just copy paste this in the URL bar if you don't know how to do that [chrome://extensions/](chrome://extensions/)
+2. Open Chrome and browse to your extensions page. Just copy paste this (**chrome://extensions/**) in the URL bar if you don't know how to do that.
 
 3. On the right upper corner there should be a switch saying _**"Developer mode"**_, turn that switch on.
 
