@@ -3,7 +3,7 @@ var yamete = document.getElementById("yamete");
 var say = document.getElementById('say');
 var isRunning;
 
-chrome.storage.sync.get("isRunning", function(result) {
+chrome.storage.local.get("isRunning", function(result) {
   isRunning = result.isRunning;
   if (isRunning) {
     say.innerHTML = "Running...";
@@ -18,7 +18,7 @@ chrome.storage.sync.get("isRunning", function(result) {
 });
 
 ripit.onclick = function() {
-  chrome.storage.sync.set({isRunning: true});
+  chrome.storage.local.set({isRunning: true});
 
   say.innerHTML = "Running...";
   ripit.disabled = true;
@@ -30,11 +30,11 @@ ripit.onclick = function() {
           file: "scripts/episode_list.js"
         });
       });
-      chrome.storage.sync.set({downloadLinkList: ""});
+      chrome.storage.local.set({downloadLinkList: ""});
 }
 
 yamete.onclick = function() {
-  chrome.storage.sync.set({isRunning: false});
+  chrome.storage.local.set({isRunning: false});
 
   say.innerHTML = "Not Running";
   ripit.disabled = false;

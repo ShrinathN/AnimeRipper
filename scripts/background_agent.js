@@ -14,7 +14,7 @@ function sendMessageToTab(todo, data) {
 
 // function getRunningStatus() {
 // var isRunning;
-//   chrome.storage.sync.get("isRunning", function(result) {
+//   chrome.storage.local.get("isRunning", function(result) {
 //     if(result.isRunning){
 //     }
 //     else {
@@ -28,21 +28,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   {
     episodeList = request.data;
     // episodeList.pop(); //first one has already been visited, dropping
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
       episodeList: episodeList
     }); //storing data
   }
   else if (request.todo == "whatIsNextPage") //if a script is requesting the next page to go to
   {
-    chrome.storage.sync.get("episodeList", function(data) {
+    chrome.storage.local.get("episodeList", function(data) {
       episodeList = data.episodeList;
       var nextPage = episodeList.pop();
       if (nextPage == undefined) //meaning all have been gone over, process ends here
       {
-        chrome.storage.sync.set({isRunning: false}); //storing data
+        chrome.storage.local.set({isRunning: false}); //storing data
 
 /////////////////////////////////////
-        chrome.storage.sync.get("downloadLinkList", function(result) {
+        chrome.storage.local.get("downloadLinkList", function(result) {
           var downloadLinkList = result.downloadLinkList;
           var finalStr = "<!DOCTYPE HTML><html><body>" + downloadLinkList + "</body></html>";
           sendMessageToTab("writeData", finalStr);
@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 /////////////////////////////////////
 
       } else { //meaning this was not the last element in the list
-        chrome.storage.sync.set({
+        chrome.storage.local.set({
           episodeList: episodeList
         });
         sendMessageToTab("goToPage", nextPage); //sending message to script to goto the nextPage
@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
   else if (request.todo == "canIRun") {
-    chrome.storage.sync.get("isRunning", function(result) {
+    chrome.storage.local.get("isRunning", function(result) {
       if(result.isRunning){
         sendMessageToTab("yesCanRun", null);
       }
@@ -75,13 +75,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
   else if (request.todo == "addDownloadLink") {
     var linkToAdd = request.data;
-    chrome.storage.sync.get("downloadLinkList", function(result) {
+    chrome.storage.local.get("downloadLinkList", function(result) {
       var downloadLinkList = result.downloadLinkList;
       if(downloadLinkList == undefined) {
         downloadLinkList = "";
       }
       downloadLinkList += linkToAdd + "<br>";
-      chrome.storage.sync.set({
+      chrome.storage.local.set({
         downloadLinkList: downloadLinkList
       });
     });
