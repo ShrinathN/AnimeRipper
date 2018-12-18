@@ -41,24 +41,24 @@ Make sure you're **not** using any ad blockers or JavaScript blockers, or this e
 
 ## Changelog :
 
-# v1.2.1
+### v1.2.1
 
 * Added changelog
 * Made the running status label dynamic
 * Fixed mirror sorting
 
-# v1.2
+### v1.2
 
 * Fixed storage bug
 * Added sort by different mirrors feature
 * Added logo
 
-# v1.1
+### v1.1
 
 * Added a run check for content scripts (so that they don't run every time)
 * Added CSS, looks better now
 * Made the download page content script more robust
 
-# v1.0
+### v1.0
 
 * Can rip anime .mp4 links off chia-anime
