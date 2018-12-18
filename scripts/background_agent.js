@@ -15,29 +15,43 @@ function sendMessageToTab(todo, data) {
     });
   });
 }
-
-
+// TODO: better to include the sorting functions in the final result pages. This way, the user will be
+//able to sort the results without having to run the extension again
 //this function displays all the links on the page
 //it is executed at the end
 function endGame() {
   chrome.storage.local.get("downloadLinkList", function(result) {
-    var downloadLinkList = result.downloadLinkList;
-    var finalStr =
-      `
+    chrome.storage.local.get("mirrorSorted", function(result2) {
+      var mirrorSorted = result2.mirrorSorted;
+      var downloadLinkList = result.downloadLinkList;
+      var finalStr =
+        `
     <!DOCTYPE HTML>
     <html>
     <head><title>ANIME RIPPER - DOWNLOAD LINKS</title></head>
     <body>
      `;
-    for (var i = 0; i < downloadLinkList.length; i++) {
-      finalStr.concat(downloadLinkList[i] + "<br>");
+     if(mirrorSorted) {
+       for (var i = 0, y = 0; i < downloadLinkList.length; i += 5, y++) {
+         finalStr = finalStr.concat(downloadLinkList[i] + "<br>");
+         if(y == 3){ //4 is the threshhold so...
+           y = 0; //resetting y
+           finalStr = finalStr.concat(downloadLinkList[i + 1] + "<br>");
+         }
+       }
+    } else {
+      for (var i = 0; i < downloadLinkList.length; i += 1) {
+        finalStr = finalStr.concat(downloadLinkList[i] + "<br>");
+      }
     }
-    finalStr.concat(
-    `<br>
+      finalStr = finalStr.concat(
+        `<br><br>
      </body>
      </html>
      `);
-    sendMessageToTab("writeData", finalStr);
+      sendMessageToTab("writeData", finalStr);
+      sendMessageToTab("globalStopMessage", null);
+    });
   });
 }
 
@@ -76,12 +90,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var linkToAdd = request.data; //this is the download link(s)
     chrome.storage.local.get("downloadLinkList", function(result) { //gets currently stored list
       var downloadLinkList = result.downloadLinkList;
-      if (downloadLinkList == undefined) {
-        downloadLinkList = [];
-      }
-      downloadLinkList.concat(linkToAdd); //appends links
       chrome.storage.local.set({
-        downloadLinkList: downloadLinkList
+        downloadLinkList: downloadLinkList.concat(linkToAdd)
       }); //saves link(s) data
     });
   }
@@ -98,6 +108,7 @@ canIRun -=-=-= yesCanRun
             -= noCannotRun
 addDownloadLink
 writeData
+globalStopMessage
 
 ===LIST OF REQUESTS===
 */

@@ -27,6 +27,7 @@ function ripLink() {
   for (counter = 0; counter < greenButtons.length; counter++) {
     downloadLink.push(greenButtons[counter].href);
   }
+
   //sends the download links list
   chrome.runtime.sendMessage({
     todo: "addDownloadLink",

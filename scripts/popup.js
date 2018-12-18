@@ -20,10 +20,35 @@ chrome.storage.local.get("isRunning", function(result) {
 });
 
 
+//this is clicked when button_yamete is clicked, its basically the "stop" button
+button_yamete.onclick = function() {
+  chrome.storage.local.set({
+    isRunning: false
+  }); //setting isRunning as false
+
+  heading_main.innerHTML = "Not Running";
+  button_ripit.disabled = false;
+  button_yamete.disabled = true;
+}
+
+//checks if the extension is running every 1 second (1000 ms)
+function checkIfStillRunning()
+{
+  chrome.storage.local.get("isRunning", function(result){
+    if(result.isRunning == false) {
+      button_yamete.onclick();
+    }
+    else {
+      window.setTimeout(checkIfStillRunning, 1000);
+    }
+  });
+}
+
 //this is run when the button_ripit is clicked
 button_ripit.onclick = function() { //setting isRunning as true
   chrome.storage.local.set({
-    isRunning: true
+    isRunning: true,
+    mirrorSorted: checkbox_mirror_sorted.checked
   });
   heading_main.innerHTML = "Running...";
   button_ripit.disabled = true;
@@ -41,16 +66,5 @@ button_ripit.onclick = function() { //setting isRunning as true
         file: "scripts/episode_list.js"
       });
   });
-}
-
-
-//this is clicked when button_yamete is clicked, its basically the "stop" button
-button_yamete.onclick = function() {
-  chrome.storage.local.set({
-    isRunning: false
-  }); //setting isRunning as false
-
-  heading_main.innerHTML = "Not Running";
-  button_ripit.disabled = false;
-  button_yamete.disabled = true;
+  window.setTimeout(checkIfStillRunning, 1000);
 }
