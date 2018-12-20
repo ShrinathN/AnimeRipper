@@ -36,6 +36,7 @@ function endGame() {
          finalStr = finalStr.concat(downloadLinkList[i] + "<br>");
          if(y == 3){ //4 is the threshhold so...
            y = 0; //resetting y
+           i++;
            finalStr = finalStr.concat(downloadLinkList[i + 1] + "<br>");
          }
        }
