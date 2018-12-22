@@ -47,8 +47,7 @@ function checkIfStillRunning()
 //this is run when the button_ripit is clicked
 button_ripit.onclick = function() { //setting isRunning as true
   chrome.storage.local.set({
-    isRunning: true,
-    mirrorSorted: checkbox_mirror_sorted.checked
+    isRunning: true
   });
   heading_main.innerHTML = "Running...";
   button_ripit.disabled = true;

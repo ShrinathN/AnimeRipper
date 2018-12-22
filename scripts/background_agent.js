@@ -21,38 +21,56 @@ function sendMessageToTab(todo, data) {
 //it is executed at the end
 function endGame() {
   chrome.storage.local.get("downloadLinkList", function(result) {
-    chrome.storage.local.get("mirrorSorted", function(result2) {
-      var mirrorSorted = result2.mirrorSorted;
-      var downloadLinkList = result.downloadLinkList;
-      var finalStr =
-        `
+    var downloadLinkList = result.downloadLinkList;
+    var finalStr =
+      `
     <!DOCTYPE HTML>
     <html>
     <head><title>ANIME RIPPER - DOWNLOAD LINKS</title></head>
     <body>
-     `;
-     if(mirrorSorted) {
-       for (var i = 0, y = 0; i < downloadLinkList.length; i += 5, y++) {
-         finalStr = finalStr.concat(downloadLinkList[i] + "<br>");
-         if(y == 3){ //4 is the threshhold so...
-           y = 0; //resetting y
-           i++;
-           finalStr = finalStr.concat(downloadLinkList[i + 1] + "<br>");
-         }
-       }
-    } else {
-      for (var i = 0; i < downloadLinkList.length; i += 1) {
-        finalStr = finalStr.concat(downloadLinkList[i] + "<br>");
-      }
+    <button id="button_all">ALL</button>
+    <button id="button_mirror_sort">MIRROR SORT</button><br><br>
+    <div id="div_area"></div>
+    </body>
+    <script>
+    `;
+
+    finalStr = finalStr.concat("var listOfLinks = [];");
+    for(var i = 0; i < downloadLinkList.length; i++) {
+      finalStr = finalStr.concat("listOfLinks[" + i + "] = \"" + downloadLinkList[i] + "\";\n");
     }
-      finalStr = finalStr.concat(
-        `<br><br>
-     </body>
-     </html>
-     `);
-      sendMessageToTab("writeData", finalStr);
-      sendMessageToTab("globalStopMessage", null);
-    });
+
+    //list of sorting functions
+    finalStr = finalStr.concat(`
+      var button_all = document.getElementById("button_all");
+      var button_mirror_sort = document.getElementById("button_mirror_sort");
+
+      button_all.onclick = function() {
+        var div_area = document.getElementById("div_area");
+        div_area.innerHTML = "";
+        for(var i = 0; i < listOfLinks.length; i++) {
+          div_area.innerHTML += "<a href=\\"" + listOfLinks[i] + "\\">" + listOfLinks[i] + "</a><br>";
+        }
+      };
+
+      button_mirror_sort.onclick = function() {
+        var div_area = document.getElementById("div_area");
+        div_area.innerHTML = "";
+        for(var i = 0, y = 0; i < listOfLinks.length; i+= 5, y++) {
+          div_area.innerHTML += "<a href=\\"" + listOfLinks[i] + "\\">" + listOfLinks[i] + "</a><br>";
+          if(y == 3) {
+            y = 0;
+            i++;
+            if(i < listOfLinks.length)
+              div_area.innerHTML += "<a href=\\"" + listOfLinks[i] + "\\">" + listOfLinks[i] + "</a><br>";
+          }
+        }
+      };
+      </script>
+      </html>
+      `);
+    sendMessageToTab("writeData", finalStr); //sending page data to script
+    sendMessageToTab("globalStopMessage", null); //stop message
   });
 }
 

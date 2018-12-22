@@ -41,6 +41,10 @@ Make sure you're **not** using any ad blockers or JavaScript blockers, or this e
 
 ## Changelog :
 
+### v1.3
+
+* Added list sorting to the generated page
+
 ### v1.2.1
 
 * Added changelog
