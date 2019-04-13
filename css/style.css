@@ -4,7 +4,20 @@ body {
   height: 150px;
 }
 button{
-  background-color: red;
+  background-color: #3399ff;
   height: 70px;
   width: 70px;
+}
+
+button:hover{
+  background-color: #0066cc;
+}
+
+
+button:disabled{
+  background-color: #99ccff;
+}
+
+button:disabled:hover{
+  background-color: #cce6ff;
 }
