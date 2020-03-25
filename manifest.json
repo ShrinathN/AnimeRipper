@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "1.4",
+  "version": "1.5",
   "name": "Anime Ripper",
   "description": "Rips anime download links off chia-anime.tv",
   "browser_action": {
@@ -27,12 +27,12 @@
   },
 
   "content_scripts": [{
-      "matches": ["http://ww2.chia-anime.tv/*subbed/"],
+      "matches": ["http://www.chia-anime.me/*subbed/"],
       "run_at": "document_idle",
       "js": ["scripts/episode_page.js"]
     },
     {
-      "matches": ["http://download.animepremium.tv/*"],
+      "matches": ["http://download.animeapp.net/video/*"],
       "run_at": "document_end",
       "js": ["scripts/download_page.js"]
     }
@@ -41,8 +41,10 @@
   "permissions": [
     "tabs",
     "storage",
-    "http://ww2.chia-anime.tv/episode/*",
-    "http://ww2.chia-anime.tv/*",
-    "http://download.animepremium.tv/*"
+    "http://www.chia-anime.me/episode/*",
+	"http://www.chia-anime.me/*",
+	"http://www.chia-anime.me/*subbed/",
+	"http://download.animeapp.net/video/*"
   ]
 }
+//http://download.animeapp.net/video/104446

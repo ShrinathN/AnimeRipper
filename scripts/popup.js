@@ -9,7 +9,8 @@ var isRunning;
 chrome.storage.local.get("isRunning", function(result) {
   isRunning = result.isRunning;
   if (isRunning) { //if isRunning is true
-    heading_main.innerHTML = "Running...";
+	heading_main.innerHTML = "Running...";
+	console.log("Running!!!~");
     button_ripit.disabled = true;
     button_yamete.disabled = false;
   } else { //if isRunning is false
