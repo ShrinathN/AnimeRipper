@@ -1,6 +1,8 @@
 # AnimeRipper
 Rips direct download (.mp4) links from chia anime.
 
+## For anime related updates visit
+### [Otakukan.com](https://otakukan.com)
 
 ## Installation :
 
